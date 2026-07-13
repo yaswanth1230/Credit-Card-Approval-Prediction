@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Prediction Form</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Credit Card Prediction Form</h2>
+
+<form action="/predict" method="POST">
+
+    <label for="Time">Time</label>
+    <input type="number" step="any" name="Time" placeholder="Enter Time" required>
+
+    <label for="Amount">Amount</label>
+    <input type="number" step="any" name="Amount" placeholder="Enter Amount" required>
+
+    <button type="submit">Predict</button>
+
+</form>
+</div>
+
+</body>
+
+</html>
