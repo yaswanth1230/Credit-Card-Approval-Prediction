@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Approval Prediction</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <a class="brand" href="index.html">
+            <span class="brand-mark">SB</span>
+            <span>SmartBridge</span>
+        </a>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#predict">Predict</a>
+        </nav>
+    </header>
+
+    <main class="hero-shell" id="home">
+        <section class="hero-content">
+            <p class="eyebrow">Machine Learning Credit Intelligence</p>
+            <h1>Credit Card Approval Prediction</h1>
+            <p class="hero-copy">
+                A beautiful web interface that estimates credit card approval using applicant income, employment, family details, and credit behavior.
+            </p>
+            <div class="hero-actions">
+                <a class="primary-button" href="#predict">Start Prediction</a>
+                <a class="secondary-button" href="https://github.com/gayatri1306-daggubati/creditcard_approval">View GitHub</a>
+            </div>
+        </section>
+
+        <section class="credit-card-preview" aria-label="Credit card preview">
+            <div class="card-chip"></div>
+            <div class="signal-lines">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <p class="card-bank">SmartBridge Platinum</p>
+            <p class="card-number">4829  1106  7742  9081</p>
+            <div class="card-footer">
+                <span>AI APPROVAL</span>
+                <strong>VALID 07/30</strong>
+            </div>
+        </section>
+    </main>
+
+    <section class="form-page" id="predict">
+        <section class="form-intro">
+            <p class="eyebrow">Static GitHub Pages Demo</p>
+            <h1>Enter Applicant Details</h1>
+            <p>This version runs fully in the browser. The Flask backend version can be run locally using <strong>python app.py</strong>.</p>
+        </section>
+
+        <form class="prediction-form" data-static-predict>
+            <div class="form-field wide">
+                <label for="applicant_name">Applicant Name</label>
+                <input id="applicant_name" name="applicant_name" type="text" placeholder="Enter applicant name" required>
+            </div>
+
+            <div class="form-field">
+                <label for="gender">Gender</label>
+                <select id="gender" name="gender" required>
+                    <option>Female</option>
+                    <option>Male</option>
+                </select>
+            </div>
+
+            <div class="form-field">
+                <label for="own_car">Own Car or Not</label>
+                <select id="own_car" name="own_car" required>
+                    <option>Yes</option>
+                    <option>No</option>
+                </select>
+            </div>
+
+            <div class="form-field">
+                <label for="own_realty">Own Real Estate</label>
+                <select id="own_realty" name="own_realty" required>
+                    <option>Yes</option>
+                    <option>No</option>
+                </select>
+            </div>
+
+            <div class="form-field">
+                <label for="annual_income">Total Annual Income</label>
+                <input id="annual_income" name="annual_income" type="number" min="0" value="50000" required>
+            </div>
+
+            <div class="form-field">
+                <label for="income_type">Type of Income</label>
+                <select id="income_type" name="income_type" required>
+                    <option>Working</option>
+                    <option>Commercial associate</option>
+                    <option>Pensioner</option>
+                    <option>State servant</option>
+                    <option>Student</option>
+                </select>
+            </div>
+
+            <div class="form-field">
+                <label for="education_type">Education</label>
+                <select id="education_type" name="education_type" required>
+                    <option>Higher education</option>
+                    <option>Secondary / secondary special</option>
+                    <option>Incomplete higher</option>
+                    <option>Lower secondary</option>
+                    <option>Academic degree</option>
+                </select>
+            </div>
+
+            <div class="form-field">
+                <label for="family_status">Family Status</label>
+                <select id="family_status" name="family_status" required>
+                    <option>Married</option>
+                    <option>Single / not married</option>
+                    <option>Civil marriage</option>
+                    <option>Separated</option>
+                    <option>Widow</option>
+                </select>
+            </div>
+
+            <div class="form-field">
+                <label for="housing_type">Type of Housing</label>
+                <select id="housing_type" name="housing_type" required>
+                    <option>House / apartment</option>
+                    <option>With parents</option>
+                    <option>Municipal apartment</option>
+                    <option>Rented apartment</option>
+                    <option>Office apartment</option>
+                    <option>Co-op apartment</option>
+                </select>
+            </div>
+
+            <div class="form-field">
+                <label for="days_birth">Age</label>
+                <input id="days_birth" name="days_birth" type="number" min="18" max="100" value="29" required>
+            </div>
+
+            <div class="form-field">
+                <label for="days_employed">Employment Years</label>
+                <input id="days_employed" name="days_employed" type="number" min="0" max="60" step="0.1" value="2.5" required>
+            </div>
+
+            <div class="form-field">
+                <label for="family_members">Family Members</label>
+                <input id="family_members" name="family_members" type="number" min="1" max="20" value="2" required>
+            </div>
+
+            <div class="form-field">
+                <label for="emi_paid_off">EMI Paid Off</label>
+                <input id="emi_paid_off" name="emi_paid_off" type="number" min="0" value="4" required>
+            </div>
+
+            <div class="form-field">
+                <label for="emi_past_dues">EMI Past Dues</label>
+                <input id="emi_past_dues" name="emi_past_dues" type="number" min="0" value="1" required>
+            </div>
+
+            <div class="form-field">
+                <label for="number_of_loans">Number of Loans</label>
+                <input id="number_of_loans" name="number_of_loans" type="number" min="0" value="2" required>
+            </div>
+
+            <div class="score-preview wide">
+                <span>Live profile strength</span>
+                <div class="meter"><span id="profileMeter"></span></div>
+                <strong id="profileScore">Calculating...</strong>
+            </div>
+
+            <button class="primary-button wide" type="submit">Predict Approval</button>
+        </form>
+
+        <section class="result-page static-result" id="staticResult" hidden>
+            <section class="result-card">
+                <p class="eyebrow">Prediction Complete</p>
+                <h1 id="staticApplicant">Applicant</h1>
+                <div class="result-badge" id="staticBadge">Result</div>
+                <div class="score-ring" id="staticRing" style="--score: 0;">
+                    <span id="staticScore">0%</span>
+                </div>
+                <div class="result-meta">
+                    <div>
+                        <span>Risk Category</span>
+                        <strong id="staticRisk">Risk</strong>
+                    </div>
+                    <div>
+                        <span>Prediction Source</span>
+                        <strong>Browser scoring demo</strong>
+                    </div>
+                </div>
+                <div class="decision-copy" id="staticMessage"></div>
+            </section>
+        </section>
+    </section>
+
+    <script src="static/js/script.js"></script>
+</body>
+</html>

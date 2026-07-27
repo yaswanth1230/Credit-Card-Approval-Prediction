@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Approval Prediction</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="{{ url_for('home') }}">
+            <span class="brand-mark">SB</span>
+            <span>SmartBridge</span>
+        </a>
+        <nav>
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('predict') }}">Predict</a>
+        </nav>
+    </header>
+
+    <main class="hero-shell">
+        <section class="hero-content">
+            <p class="eyebrow">Machine Learning Credit Intelligence</p>
+            <h1>Credit Card Approval Prediction</h1>
+            <p class="hero-copy">
+                Analyze applicant income, employment, family details, and credit behavior to predict approval decisions through a fast Flask web application.
+            </p>
+            <div class="hero-actions">
+                <a class="primary-button" href="{{ url_for('predict') }}">Start Prediction</a>
+                <a class="secondary-button" href="#features">View Features</a>
+            </div>
+        </section>
+
+        <section class="credit-card-preview" aria-label="Credit card preview">
+            <div class="card-chip"></div>
+            <div class="signal-lines">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <p class="card-bank">SmartBridge Platinum</p>
+            <p class="card-number">4829  1106  7742  9081</p>
+            <div class="card-footer">
+                <span>AI APPROVAL</span>
+                <strong>VALID 07/30</strong>
+            </div>
+        </section>
+    </main>
+
+    <section class="feature-grid" id="features">
+        <article>
+            <span class="feature-icon">01</span>
+            <h2>Applicant Analysis</h2>
+            <p>Processes income type, education, housing, employment, and family information.</p>
+        </article>
+        <article>
+            <span class="feature-icon">02</span>
+            <h2>Credit Behavior</h2>
+            <p>Uses repayment history, past dues, paid EMIs, and loan count to estimate risk.</p>
+        </article>
+        <article>
+            <span class="feature-icon">03</span>
+            <h2>Instant Result</h2>
+            <p>Displays approval status, risk level, and confidence score on a clean result page.</p>
+        </article>
+    </section>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

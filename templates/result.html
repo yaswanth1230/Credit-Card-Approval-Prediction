@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="{{ url_for('home') }}">
+            <span class="brand-mark">SB</span>
+            <span>SmartBridge</span>
+        </a>
+        <nav>
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('predict') }}">Predict Again</a>
+        </nav>
+    </header>
+
+    <main class="result-page">
+        <section class="result-card {% if result.approved %}approved{% else %}rejected{% endif %}">
+            <p class="eyebrow">Prediction Complete</p>
+            <h1>{{ applicant_name }}</h1>
+            <div class="result-badge">
+                {% if result.approved %}
+                    Credit Card Approved
+                {% else %}
+                    Credit Card Rejected
+                {% endif %}
+            </div>
+
+            <div class="score-ring" style="--score: {{ result.score }};">
+                <span>{{ result.score }}%</span>
+            </div>
+
+            <div class="result-meta">
+                <div>
+                    <span>Risk Category</span>
+                    <strong>{{ result.risk_level }}</strong>
+                </div>
+                <div>
+                    <span>Prediction Source</span>
+                    <strong>{{ result.model_source }}</strong>
+                </div>
+            </div>
+
+            <div class="decision-copy">
+                {% if result.approved %}
+                    The applicant profile shows healthy repayment behavior and acceptable financial risk.
+                {% else %}
+                    The applicant profile needs stronger repayment history or lower risk indicators before approval.
+                {% endif %}
+            </div>
+
+            <a class="primary-button" href="{{ url_for('predict') }}">Run Another Prediction</a>
+        </section>
+
+        <aside class="summary-panel">
+            <h2>Submitted Profile</h2>
+            <ul>
+                <li><span>Income</span><strong>{{ form_data.annual_income }}</strong></li>
+                <li><span>Income Type</span><strong>{{ form_data.income_type }}</strong></li>
+                <li><span>Housing</span><strong>{{ form_data.housing_type }}</strong></li>
+                <li><span>Paid EMIs</span><strong>{{ form_data.emi_paid_off }}</strong></li>
+                <li><span>Past Dues</span><strong>{{ form_data.emi_past_dues }}</strong></li>
+                <li><span>Loans</span><strong>{{ form_data.number_of_loans }}</strong></li>
+            </ul>
+        </aside>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
