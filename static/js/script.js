@@ -1,95 +1,444 @@
+/* ===========================================
+   ELEMENTS
+=========================================== */
+
 const form = document.querySelector(".prediction-form");
 const meter = document.querySelector("#profileMeter");
 const scoreText = document.querySelector("#profileScore");
 
-function numberValue(name, fallback = 0) {
+/* ===========================================
+   HELPERS
+=========================================== */
+
+function getNumber(name, fallback = 0) {
+
     const field = form?.querySelector(`[name="${name}"]`);
-    const value = Number.parseFloat(field?.value);
-    return Number.isFinite(value) ? value : fallback;
+
+    const value = parseFloat(field?.value);
+
+    return isNaN(value) ? fallback : value;
+
 }
 
-function selectValue(name) {
+function getValue(name) {
+
     return form?.querySelector(`[name="${name}"]`)?.value || "";
+
 }
 
-function calculatePreviewScore() {
-    if (!form || !meter || !scoreText) {
-        return;
-    }
+/* ===========================================
+   ANIMATE NUMBER
+=========================================== */
 
-    const income = numberValue("annual_income");
-    const paid = numberValue("emi_paid_off");
-    const dues = numberValue("emi_past_dues");
-    const loans = numberValue("number_of_loans");
-    const employment = numberValue("days_employed");
-    const age = numberValue("days_birth");
-    const family = numberValue("family_members", 1);
+function animateScore(target){
 
-    let score = 45;
+    let current = 0;
 
-    score += income >= 250000 ? 18 : income >= 100000 ? 12 : income >= 50000 ? 7 : -8;
-    score += paid >= 3 ? 14 : paid >= 1 ? 8 : 0;
-    score += dues === 0 ? 12 : dues <= 2 ? 2 : -18;
-    score += loans <= 2 ? 8 : loans <= 5 ? 2 : -10;
-    score += employment >= 3 ? 8 : employment < 1 ? -4 : 0;
-    score += age >= 23 && age <= 60 ? 5 : 0;
-    score += selectValue("own_car") === "Yes" ? 3 : 0;
-    score += selectValue("own_realty") === "Yes" ? 5 : 0;
-    score += ["Working", "Commercial associate", "State servant"].includes(selectValue("income_type")) ? 5 : 0;
-    score += family > 5 ? -5 : 0;
+    const timer = setInterval(()=>{
 
-    const finalScore = Math.max(0, Math.min(100, Math.round(score)));
-    meter.style.width = `${finalScore}%`;
-    scoreText.textContent = `${finalScore}% profile strength`;
+        current++;
 
-    return finalScore;
-}
+        scoreText.innerHTML =
+            `${current}% Profile Strength`;
 
-if (form) {
-    form.addEventListener("input", calculatePreviewScore);
-    form.addEventListener("change", calculatePreviewScore);
-    form.addEventListener("submit", (event) => {
-        if (!form.hasAttribute("data-static-predict")) {
-            return;
+        if(current>=target){
+
+            clearInterval(timer);
+
         }
 
-        event.preventDefault();
+    },12);
 
-        const score = calculatePreviewScore();
-        const approved = score >= 60;
-        const result = document.querySelector("#staticResult");
-        const card = result?.querySelector(".result-card");
-
-        document.querySelector("#staticApplicant").textContent =
-            form.querySelector('[name="applicant_name"]').value || "Applicant";
-        document.querySelector("#staticBadge").textContent = approved
-            ? "Credit Card Approved"
-            : "Credit Card Rejected";
-        document.querySelector("#staticRing").style.setProperty("--score", score);
-        document.querySelector("#staticScore").textContent = `${score}%`;
-        document.querySelector("#staticRisk").textContent =
-            score >= 80 ? "Low Risk" : score >= 60 ? "Moderate Risk" : "High Risk";
-        document.querySelector("#staticMessage").textContent = approved
-            ? "The applicant profile shows healthy repayment behavior and acceptable financial risk."
-            : "The applicant profile needs stronger repayment history or lower risk indicators before approval.";
-
-        card.classList.toggle("approved", approved);
-        card.classList.toggle("rejected", !approved);
-        result.hidden = false;
-        result.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
-    calculatePreviewScore();
 }
 
-document.querySelectorAll(".credit-card-preview").forEach((card) => {
-    card.addEventListener("pointermove", (event) => {
-        const rect = card.getBoundingClientRect();
-        const x = (event.clientX - rect.left) / rect.width - 0.5;
-        const y = (event.clientY - rect.top) / rect.height - 0.5;
-        card.style.transform = `rotateX(${y * -8}deg) rotateY(${x * 10}deg) rotate(-3deg)`;
-    });
+/* ===========================================
+   CALCULATE SCORE
+=========================================== */
 
-    card.addEventListener("pointerleave", () => {
-        card.style.transform = "rotate(-3deg)";
-    });
-});
+function calculatePreviewScore(){
+
+    if(!form) return;
+
+    const income = getNumber("annual_income");
+
+    const paid = getNumber("emi_paid_off");
+
+    const due = getNumber("emi_past_dues");
+
+    const loans = getNumber("number_of_loans");
+
+    const age = getNumber("days_birth");
+
+    const work = getNumber("days_employed");
+
+    const family = getNumber("family_members",1);
+
+    let score = 40;
+
+    /* Income */
+
+    if(income>500000){
+
+        score+=20;
+
+    }else if(income>250000){
+
+        score+=15;
+
+    }else if(income>100000){
+
+        score+=10;
+
+    }else{
+
+        score-=5;
+
+    }
+
+    /* Paid EMI */
+
+    score += paid>=5 ? 15 :
+
+             paid>=2 ? 8 : 0;
+
+    /* Pending EMI */
+
+    if(due==0){
+
+        score+=15;
+
+    }else if(due<=2){
+
+        score+=5;
+
+    }else{
+
+        score-=15;
+
+    }
+
+    /* Loans */
+
+    if(loans<=2){
+
+        score+=10;
+
+    }else if(loans<=5){
+
+        score+=4;
+
+    }else{
+
+        score-=8;
+
+    }
+
+    /* Employment */
+
+    if(work>=5){
+
+        score+=10;
+
+    }else if(work>=2){
+
+        score+=5;
+
+    }
+
+    /* Age */
+
+    if(age>=25 && age<=55){
+
+        score+=8;
+
+    }
+
+    /* Car */
+
+    if(getValue("own_car")==="Yes"){
+
+        score+=3;
+
+    }
+
+    /* House */
+
+    if(getValue("own_realty")==="Yes"){
+
+        score+=5;
+
+    }
+
+    /* Income Type */
+
+    if(
+
+        [
+
+            "Working",
+
+            "Commercial associate",
+
+            "State servant"
+
+        ].includes(
+
+            getValue("income_type")
+
+        )
+
+    ){
+
+        score+=6;
+
+    }
+
+    /* Family */
+
+    if(family>5){
+
+        score-=5;
+
+    }
+
+    score=Math.max(0,Math.min(score,100));
+
+    /* Progress Bar */
+
+    meter.style.width = score+"%";
+
+    meter.style.transition="1s";
+
+    /* Color */
+
+    if(score<40){
+
+        meter.style.background="#ef4444";
+
+    }
+
+    else if(score<70){
+
+        meter.style.background="#facc15";
+
+    }
+
+    else{
+
+        meter.style.background="#10b981";
+
+    }
+
+    animateScore(score);
+
+    return score;
+
+}
+
+/* ===========================================
+   LIVE UPDATE
+=========================================== */
+
+if(form){
+
+form.addEventListener(
+
+"input",
+
+calculatePreviewScore
+
+);
+
+form.addEventListener(
+
+"change",
+
+calculatePreviewScore
+
+);
+
+calculatePreviewScore();
+
+}
+.primary-button,
+.secondary-button{
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+.ripple{
+
+position:absolute;
+
+border-radius:50%;
+
+transform:scale(0);
+
+background:rgba(255,255,255,.4);
+
+animation:ripple .7s linear;
+
+pointer-events:none;
+
+}
+
+@keyframes ripple{
+
+to{
+
+transform:scale(4);
+
+opacity:0;
+
+}
+
+}
+/* RESULT STATUS */
+
+.result-card.approved{
+
+border:2px solid #10b981;
+
+box-shadow:0 0 35px rgba(16,185,129,.4);
+
+}
+
+.result-card.rejected{
+
+border:2px solid #ef4444;
+
+box-shadow:0 0 35px rgba(239,68,68,.35);
+
+}
+
+button:disabled{
+
+cursor:not-allowed;
+
+filter:brightness(.9);
+
+}
+/* Scroll Progress */
+
+#scrollProgress{
+
+position:fixed;
+
+top:0;
+
+left:0;
+
+height:4px;
+
+width:0;
+
+z-index:99999;
+
+background:linear-gradient(90deg,#8b5cf6,#06b6d4);
+
+}
+
+/* Back To Top */
+
+#topBtn{
+
+position:fixed;
+
+right:30px;
+
+bottom:30px;
+
+width:55px;
+
+height:55px;
+
+border:none;
+
+border-radius:50%;
+
+background:linear-gradient(135deg,#3b82f6,#8b5cf6);
+
+color:white;
+
+font-size:24px;
+
+cursor:pointer;
+
+opacity:0;
+
+transform:translateY(20px);
+
+transition:.4s;
+
+box-shadow:0 0 25px rgba(59,130,246,.35);
+
+z-index:999;
+
+}
+
+#topBtn.show{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+#topBtn:hover{
+
+transform:scale(1.1);
+
+}
+
+/* Floating Particles */
+
+.particle{
+
+position:fixed;
+
+bottom:-30px;
+
+width:8px;
+
+height:8px;
+
+border-radius:50%;
+
+background:rgba(6,182,212,.4);
+
+animation:particleMove linear infinite;
+
+pointer-events:none;
+
+z-index:-1;
+
+}
+
+@keyframes particleMove{
+
+0%{
+
+transform:translateY(0) scale(1);
+
+opacity:0;
+
+}
+
+20%{
+
+opacity:1;
+
+}
+
+100%{
+
+transform:translateY(-110vh) scale(.2);
+
+opacity:0;
+
+}
+
+}
